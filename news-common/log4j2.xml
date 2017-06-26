@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<File name="logger" fileName="D:/main.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<!-- <Policies>
+                <SizeBasedTriggeringPolicy size="512 kB"/>
+            </Policies> -->
+		</File>
+	</Appenders>
+	<Loggers>
+		<Logger name="logger" level="info"
+			additivity="false">
+			<AppenderRef ref="logger" />
+		</Logger>
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="logger" />
+		</Root>
+	</Loggers>
+</Configuration>

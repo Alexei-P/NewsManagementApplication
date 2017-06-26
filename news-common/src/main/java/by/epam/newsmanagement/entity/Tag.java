@@ -3,6 +3,12 @@ package by.epam.newsmanagement.entity;
 public class Tag {
 	int id;
 	String tag;
+	
+	public Tag(int id, String tag) {
+		super();
+		this.id = id;
+		this.tag = tag;
+	}
 	public int getId() {
 		return id;
 	}

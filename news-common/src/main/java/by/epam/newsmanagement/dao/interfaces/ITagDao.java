@@ -1,5 +1,8 @@
 package by.epam.newsmanagement.dao.interfaces;
 
+import java.util.ArrayList;
+
+import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.exception.dao.DaoException;
 
 public interface ITagDao {
@@ -8,4 +11,5 @@ public interface ITagDao {
 	public void changeTag(String oldTag, String newTag) throws DaoException;
 
 	public void deleteTag(String tag) throws DaoException;
+	public ArrayList<Tag> getAllTags() throws DaoException;
 }
