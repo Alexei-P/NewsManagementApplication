@@ -12,4 +12,5 @@ public interface IAdminDao {
 	public void disableAdminRole(String user) throws DaoException;
 	
 	public void deleteComment(String newsTitle, String commenId) throws DaoException;
+	
 }

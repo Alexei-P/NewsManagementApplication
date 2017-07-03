@@ -118,4 +118,33 @@ public class TagDao implements ITagDao {
 		return tagList;
 	}
 
+	@Override
+	public ArrayList<String> getTagsByNewsId(int newsId) throws DaoException {
+		ResultSet rs = null;
+		ArrayList<String> tagList = new  ArrayList<String>();
+		try(Connection connection = ConnectorDb.getConnection();
+				PreparedStatement ps = connection.prepareStatement("SELECT tag FROM TAG INNER JOIN news_tag "
+						+ "ON NEWS_TAG.FK_TAG = TAG.TAG_ID WHERE NEWS_TAG.FK_NEWS = ?")){
+			ps.setInt(1, newsId);
+			rs = ps.executeQuery();
+		} catch (SQLException e) {
+			logger.info("Connection/Statement was not established");
+			throw new DaoException(e);
+		}
+		
+		try {
+			while (rs.next()){
+				//Tag tag = new Tag();
+				//tag.setId(rs.getInt(1));
+				//tag.setTag(rs.getString(2));
+				String tag = rs.getString(2);		
+				tagList.add(tag);
+			}
+		} catch (SQLException e) {
+			logger.info("SQLException during result set parsing");
+			throw new DaoException(e);
+		}
+		return tagList;
+	}
+
 }

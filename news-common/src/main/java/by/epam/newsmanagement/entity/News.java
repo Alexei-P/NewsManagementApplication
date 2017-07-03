@@ -1,61 +1,100 @@
 package by.epam.newsmanagement.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class News {
+import by.epam.newsmanagement.entity.author.Author;
+
+public class News implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	int id;
-	String title;
-	LocalDate publicationDate;
-	String author;
+	String mainTitle;
+	String shortTitle;
 	String content;
-	String tag;
+	Author author;
+	LocalDate publicationDate;
+	String pathToPhoto;
+	ArrayList<String> tagList;
 	ArrayList<String> commentsList;
+	
+	public News() {
+	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getTitle() {
-		return title;
+
+	public String getMainTitle() {
+		return mainTitle;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+
+	public void setMainTitle(String mainTitle) {
+		this.mainTitle = mainTitle;
 	}
-	public LocalDate getPublicationDate() {
-		return publicationDate;
+
+	public String getShortTitle() {
+		return shortTitle;
 	}
-	public void setPublicationDate(LocalDate publicationDate) {
-		this.publicationDate = publicationDate;
+
+	public void setShortTitle(String shortTitle) {
+		this.shortTitle = shortTitle;
 	}
-	public String getAuthor() {
-		return author;
-	}
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-	
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getTag() {
-		return tag;
+
+	public Author getAuthor() {
+		return author;
 	}
-	public void setTag(String tag) {
-		this.tag = tag;
+
+	public void setAuthor(Author author) {
+		this.author = author;
 	}
-	
+
+	public LocalDate getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(LocalDate publicationDate) {
+		this.publicationDate = publicationDate;
+	}
+
+	public String getPathToPhoto() {
+		return pathToPhoto;
+	}
+
+	public void setPathToPhoto(String pathToPhoto) {
+		this.pathToPhoto = pathToPhoto;
+	}
+
+	public ArrayList<String> getTagList() {
+		return tagList;
+	}
+
+	public void setTagList(ArrayList<String> tagList) {
+		this.tagList = tagList;
+	}
+
 	public ArrayList<String> getCommentsList() {
 		return commentsList;
 	}
+
 	public void setCommentsList(ArrayList<String> commentsList) {
 		this.commentsList = commentsList;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -64,11 +103,14 @@ public class News {
 		result = prime * result + ((commentsList == null) ? 0 : commentsList.hashCode());
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + id;
+		result = prime * result + ((mainTitle == null) ? 0 : mainTitle.hashCode());
+		result = prime * result + ((pathToPhoto == null) ? 0 : pathToPhoto.hashCode());
 		result = prime * result + ((publicationDate == null) ? 0 : publicationDate.hashCode());
-		result = prime * result + ((tag == null) ? 0 : tag.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((shortTitle == null) ? 0 : shortTitle.hashCode());
+		result = prime * result + ((tagList == null) ? 0 : tagList.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -95,25 +137,31 @@ public class News {
 			return false;
 		if (id != other.id)
 			return false;
+		if (mainTitle == null) {
+			if (other.mainTitle != null)
+				return false;
+		} else if (!mainTitle.equals(other.mainTitle))
+			return false;
+		if (pathToPhoto == null) {
+			if (other.pathToPhoto != null)
+				return false;
+		} else if (!pathToPhoto.equals(other.pathToPhoto))
+			return false;
 		if (publicationDate == null) {
 			if (other.publicationDate != null)
 				return false;
 		} else if (!publicationDate.equals(other.publicationDate))
 			return false;
-		if (tag == null) {
-			if (other.tag != null)
+		if (shortTitle == null) {
+			if (other.shortTitle != null)
 				return false;
-		} else if (!tag.equals(other.tag))
+		} else if (!shortTitle.equals(other.shortTitle))
 			return false;
-		if (title == null) {
-			if (other.title != null)
+		if (tagList == null) {
+			if (other.tagList != null)
 				return false;
-		} else if (!title.equals(other.title))
+		} else if (!tagList.equals(other.tagList))
 			return false;
 		return true;
-	}
-	
-	
-	
-	
+	}	
 }
