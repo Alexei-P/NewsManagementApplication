@@ -15,8 +15,8 @@
 	<bean id="tagDao" class="by.epam.newsmanagement.dao.impl.TagDao" />
 	<bean id="userDao" class="by.epam.newsmanagement.dao.impl.UserDao" />
 	
-	<bean id="hikariDataSource class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
-	        <property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close" >
+	        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 	        <property name="jdbcUrl" value="jdbc:oracle:thin://localhost:1521/orcl" />
 	        <property name="username" value="system" />
 	        <property name="password" value="Oracle_1" />
