@@ -24,17 +24,7 @@ public class AuthorDao implements IAuthorDao {
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("INSERT INTO author (author, state) VALUES(?, ?)")) {
 			ps.setString(1, authorName);
-			switch (authorState) {
-			case DELETED:
-				ps.setString(2, "D");
-				break;
-			case ACTIVE:
-				ps.setString(2, "A");
-				break;
-			case BANNED:
-				ps.setString(2, "B");
-				break;
-			}
+			ps.setString(2, authorState.toString());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			logger.info("SQL Exception");
@@ -97,7 +87,7 @@ public class AuthorDao implements IAuthorDao {
 	@Override
 	public Author getAuthorById(int authorId) throws DaoException {
 		ResultSet rs = null;
-		Author author = null;
+		Author author = new Author();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("SELECT * FROM author WHERE a_id = ?")){
 			ps.setInt(1, authorId);

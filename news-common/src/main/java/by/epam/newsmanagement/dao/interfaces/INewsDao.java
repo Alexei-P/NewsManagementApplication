@@ -1,7 +1,5 @@
 package by.epam.newsmanagement.dao.interfaces;
 
-import java.awt.List;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import by.epam.newsmanagement.entity.News;
