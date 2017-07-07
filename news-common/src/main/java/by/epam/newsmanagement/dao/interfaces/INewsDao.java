@@ -23,4 +23,6 @@ public interface INewsDao {
 	public void deleteTagFromNews(int newsId, String tag) throws DaoException;
 	
 	public ArrayList<String> getCommentsToNews(int id) throws DaoException;
+	
+	public News getNewsById (int newsIs) throws DaoException;
 }

@@ -2,6 +2,7 @@ package by.epam.newsmanagement.service.interfaces;
 
 import java.util.ArrayList;
 
+import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.entity.News;
 import by.epam.newsmanagement.exception.service.ServiceException;
 
@@ -18,7 +19,7 @@ public interface INewsService {
 	
 	public void deleteNews(int newsId) throws ServiceException;
 	
-	public void addComment() throws ServiceException;
+	public void addComment(int newsId, Comment comment) throws ServiceException;
 	
 	
 }

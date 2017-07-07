@@ -92,12 +92,20 @@ public class AuthorDao implements IAuthorDao {
 				PreparedStatement ps = connection.prepareStatement("SELECT * FROM author WHERE a_id = ?")){
 			ps.setInt(1, authorId);
 			rs = ps.executeQuery();
+			while (rs.next()){
+				int i = rs.getInt(3);
+				String name = rs.getString(1);
+				String authorState = rs.getString(2);
+				author.setId(i);
+				author.setName(name);
+				author.setAuthorState(AuthorState.valueOf(authorState));
+			}
 		} catch (SQLException e) {
 			logger.info("SQL Exception select author by Id");
 			throw new DaoException(e);
 		}
 		
-		try {
+		/*try {
 			while (rs.next()){
 				int i = rs.getInt(3);
 				String name = rs.getString(1);
@@ -109,7 +117,7 @@ public class AuthorDao implements IAuthorDao {
 		} catch (SQLException e) {
 			logger.info("SQL Exception while result set parsing");
 			throw new DaoException(e);
-		}
+		}*/
 		return author;
 	}
 

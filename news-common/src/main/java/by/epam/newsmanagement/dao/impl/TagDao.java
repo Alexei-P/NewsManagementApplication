@@ -15,7 +15,7 @@ public class TagDao implements ITagDao {
 	public static void main(String[] args) { // TEST
 		ITagDao tagDao = new TagDao();
 		try {
-			tagDao.createTag("economics");
+			tagDao.changeTag("economics_2", "economics_3");
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,12 +127,19 @@ public class TagDao implements ITagDao {
 						+ "ON NEWS_TAG.FK_TAG = TAG.TAG_ID WHERE NEWS_TAG.FK_NEWS = ?")){
 			ps.setInt(1, newsId);
 			rs = ps.executeQuery();
+			while (rs.next()){
+				//Tag tag = new Tag();
+				//tag.setId(rs.getInt(1));
+				//tag.setTag(rs.getString(2));
+				String tag = rs.getString(1);		
+				tagList.add(tag);
+			}
 		} catch (SQLException e) {
 			logger.info("Connection/Statement was not established");
 			throw new DaoException(e);
 		}
 		
-		try {
+		/*try {
 			while (rs.next()){
 				//Tag tag = new Tag();
 				//tag.setId(rs.getInt(1));
@@ -143,7 +150,7 @@ public class TagDao implements ITagDao {
 		} catch (SQLException e) {
 			logger.info("SQLException during result set parsing");
 			throw new DaoException(e);
-		}
+		}*/
 		return tagList;
 	}
 

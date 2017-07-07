@@ -14,13 +14,14 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class ConnectorDb {
 	private static HikariDataSource ds;
-	static {
-//		Properties properties = new Properties();
-//		InputStream is = null;
-		/*String url = null;
+	private static ConnectorDb connector = null;
+	static {		
+		Properties properties = new Properties();
+		InputStream is = null;
+		String url = null;
 		String user = null;
-		String password = null;*/
-		/*try {
+		String password = null;
+		try {
 			is = new FileInputStream(
 					"D:\\lab_workspace\\newsmnt\\news-common\\src\\main\\resources\\by.epam.database\\db.properties");
 			properties.load(is);
@@ -28,33 +29,32 @@ public class ConnectorDb {
 			e.printStackTrace();
 		}catch (IOException e) {
 			e.printStackTrace();
-		}*/
-		/*url = properties.getProperty("db.url");
+		}
+		url = properties.getProperty("db.url");
 		user = properties.getProperty("db.user");
-		password = properties.getProperty("db.password");*/
+		password = properties.getProperty("db.password");
 
-		/*HikariConfig config = new HikariConfig();
-		ds.set*/
-		/*config.setJdbcUrl(url);
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl(url);
 		config.setUsername(user);
 		config.setPassword(password);
 		config.setDriverClassName("oracle.jdbc.driver.OracleDriver");
 		config.addDataSourceProperty("cachePrepStmts", "true");
 		config.addDataSourceProperty("prepStmtCacheSize", "250");
-		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");*/
-		//ds = new HikariDataSource(config);
+		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+		ds = new HikariDataSource(config);
 	}
 
 	/*public static void main(String[] args) throws SQLException {
 		Connection connection = ConnectorDb.getConnection();
-	}
-*/
-	/*public static ConnectorDb getInstance() {
+	}*/
+
+	public static ConnectorDb getInstance() {
 		if (connector != null) {
 			return new ConnectorDb();
 		} else
 			return connector;
-	}*/
+	}
 
 	public static Connection getConnection() throws SQLException {
 		return ds.getConnection();

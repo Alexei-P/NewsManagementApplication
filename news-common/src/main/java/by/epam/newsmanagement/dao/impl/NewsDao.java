@@ -10,6 +10,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 import by.epam.newsmanagement.dao.factory.DaoFactory;
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
 import by.epam.newsmanagement.dao.interfaces.INewsDao;
@@ -20,15 +23,50 @@ import by.epam.newsmanagement.entity.author.Author;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.utils.ConnectorDb;
 
+@Repository
+@Component
 public class NewsDao implements INewsDao {
 	public static org.apache.logging.log4j.Logger Logger = org.apache.logging.log4j.LogManager.getLogger("logger");
+	
+	ITagDao tagDao;
+	IAuthorDao authorDao;
+
+	public NewsDao() {
+	}
+
+	public ITagDao getTagDao() {
+		return tagDao;
+	}
+
+	public void setTagDao(ITagDao tagDao) {
+		this.tagDao = tagDao;
+	}
+
+	public IAuthorDao getAuthorDao() {
+		return authorDao;
+	}
+
+	public void setAuthorDao(IAuthorDao authorDao) {
+		this.authorDao = authorDao;
+	}
+
+	public static void main(String[] args) {
+		NewsDao newsDao = new NewsDao();
+		try {
+			ArrayList<News> newsList = newsDao.getAllNews();
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void addNews(News news) throws DaoException {
 
 		java.sql.Date date = Date.valueOf(news.getPublicationDate());
 
-		try (Connection connection = ConnectorDb.getConnection(); //news creation 
+		try (Connection connection = ConnectorDb.getConnection(); // news
+																	// creation
 				PreparedStatement ps = connection
 						.prepareStatement("INSERT INTO news (main_title, short_title, n_content, author_id, "
 								+ "n_date, path_to_photo) VALUES(?,?,?,?,?,?)")) {
@@ -43,15 +81,16 @@ public class NewsDao implements INewsDao {
 			Logger.info("SQLException during news adding");
 			e.printStackTrace();
 		}
-		
+
 		DaoFactory daoFactory = DaoFactory.getDaoFactory();
 		ITagDao tagDao = daoFactory.getTagDao();
 		ArrayList<String> tagList = tagDao.getTagsByNewsId(news.getId());
-		
-		try (Connection connection = ConnectorDb.getConnection(); //adding tags to news
+
+		try (Connection connection = ConnectorDb.getConnection(); // adding tags
+																	// to news
 				PreparedStatement ps = connection
 						.prepareStatement("INSERT INTO news_tag (fk_news, fk_tag) VALUES(?,?)")) {
-			for (int i =0 ; i<tagList.size(); i++){
+			for (int i = 0; i < tagList.size(); i++) {
 				ps.setInt(1, news.getId());
 				ps.setString(2, tagList.get(i));
 				ps.addBatch();
@@ -124,37 +163,11 @@ public class NewsDao implements INewsDao {
 		ITagDao tagDao = daoFactory.getTagDao();
 		ResultSet rs = null;
 		ArrayList<News> newsList = new ArrayList<News>();
-		// int id = 0;
-		/*
-		 * String mainTitle = null; String shortTitle = null; String content =
-		 * null; Clob content_clob = null; int author_id = 0; Date
-		 * publicationDate_old = null; LocalDate publicationDate = null; String
-		 * pathToPhoto = null; ArrayList<String> tagList = null;
-		 * ArrayList<String> commentsList = null;
-		 */
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
 						.prepareStatement("SELECT id, main_title, short_title, n_content, author_id,"
 								+ "n_date , path_to_photo FROM news")) {
 			rs = ps.executeQuery();
-		} catch (SQLException e) {
-			Logger.info("SQLException during comment deletion");
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				} else {
-					Logger.info("Result set is null");
-					throw new DaoException();
-				}
-			} catch (SQLException e) {
-				Logger.info("SQLException during comment deletion (ResultSet closing)");
-				throw new DaoException(e);
-			}
-		}
-
-		try {
 			while (rs.next()) {
 				News news = new News();
 				int id = rs.getInt(1);
@@ -163,10 +176,16 @@ public class NewsDao implements INewsDao {
 				Clob content_clob = rs.getClob(4);
 				int author_id = rs.getInt(5);
 				Date publicationDate_old = rs.getDate(6);
-				LocalDate publicationDate = publicationDate_old.toInstant().atZone(ZoneId.systemDefault())
-						.toLocalDate();
+				LocalDate publicationDate = publicationDate_old.toLocalDate();
 				String pathToPhoto = rs.getString(7);
 				Author author = authorDao.getAuthorById(author_id);
+				news.setId(id);
+				news.setMainTitle(mainTitle);
+				news.setShortTitle(shortTitle);
+				// TODO add transformation CLOB to Text
+				news.setAuthor(author);
+				news.setPublicationDate(publicationDate);
+				news.setPathToPhoto(pathToPhoto);
 				ArrayList<String> comments = getCommentsToNews(id);
 				news.setCommentsList(comments);
 				ArrayList<String> tagList = tagDao.getTagsByNewsId(id);
@@ -174,8 +193,8 @@ public class NewsDao implements INewsDao {
 				newsList.add(news);
 			}
 		} catch (SQLException e) {
-			Logger.info("SQLException during news creation, ResultSet parsing");
-			throw new DaoException(e);
+			Logger.info("SQLException: getAllNews");
+			e.printStackTrace();
 		}
 		return newsList;
 	}
@@ -210,12 +229,14 @@ public class NewsDao implements INewsDao {
 	}
 
 	@Override
-	public ArrayList<String> getCommentsToNews(int id) throws DaoException {
+	public ArrayList<String> getCommentsToNews(int newsId) throws DaoException {
 		ResultSet rs = null;
 		ArrayList<String> newsList = new ArrayList<String>();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
-						.prepareStatement("SELECT nc_comment FROM news_comment" + "WHERE news_id = ?")) {
+						.prepareStatement("SELECT text FROM comment_entity INNER JOIN news_comment "
+								+ "ON comment_entity.comment_id = news_comment.comment_id " + "WHERE news_id = ?")) {
+			ps.setInt(1, newsId);
 			rs = ps.executeQuery();
 			if (rs != null) {
 				while (rs.next()) {
@@ -227,13 +248,54 @@ public class NewsDao implements INewsDao {
 			throw new DaoException(e);
 		} finally {
 			try {
+				if (rs!=null){
 				rs.close();
+				}
 			} catch (SQLException e) {
 				Logger.info("SQLException during getting comments to news");
 				throw new DaoException(e);
 			}
 		}
 		return newsList;
+	}
+
+	@Override
+	public News getNewsById(int newsId) throws DaoException {
+		ResultSet rs = null;
+		News news = new News();
+		try (Connection connection = ConnectorDb.getConnection();
+				PreparedStatement ps = connection
+						.prepareStatement("SELECT id, main_title, short_title, n_content, author_id,"
+								+ "n_date , path_to_photo FROM news WHERE id = ?")) {
+			ps.setInt(1,newsId);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt(1);
+				String mainTitle = rs.getString(2);
+				String shortTitle = rs.getString(3);
+				Clob content_clob = rs.getClob(4);
+				int author_id = rs.getInt(5);
+				Date publicationDate_old = rs.getDate(6);
+				LocalDate publicationDate = publicationDate_old.toLocalDate();
+				String pathToPhoto = rs.getString(7);
+				Author author = authorDao.getAuthorById(author_id);
+				news.setId(id);
+				news.setMainTitle(mainTitle);
+				news.setShortTitle(shortTitle);
+				// TODO add transformation CLOB to Text
+				news.setAuthor(author);
+				news.setPublicationDate(publicationDate);
+				news.setPathToPhoto(pathToPhoto);
+				ArrayList<String> comments = getCommentsToNews(id);
+				news.setCommentsList(comments);
+				ArrayList<String> tagList = tagDao.getTagsByNewsId(id);
+				news.setTagList(tagList);
+			}
+		} catch (SQLException e) {
+			Logger.info("SQLException: while getting news by Id");
+			e.printStackTrace();
+		}
+		return news;
 	}
 
 }

@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
-	
-	
+
+
 	<bean id="adminDao" class="by.epam.newsmanagement.dao.impl.AdminDao" />
 	<bean id="authorDao" class="by.epam.newsmanagement.dao.impl.AuthorDao" />
 	<bean id="commentDao" class="by.epam.newsmanagement.dao.impl.CommentDao" />
-	<bean id="newsDao" class="by.epam.newsmanagement.dao.impl.NewsDao" />
+
+	<bean id="newsDao" class="by.epam.newsmanagement.dao.impl.NewsDao">
+		<property name="tagDao" ref="tagDao" />
+		<property name="authorDao" ref="authorDao"/>
+	</bean>
 	<bean id="tagDao" class="by.epam.newsmanagement.dao.impl.TagDao" />
 	<bean id="userDao" class="by.epam.newsmanagement.dao.impl.UserDao" />
-	
-	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close" >
-	        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-	        <property name="jdbcUrl" value="jdbc:oracle:thin://localhost:1521/orcl" />
-	        <property name="username" value="system" />
-	        <property name="password" value="Oracle_1" />
+
+	<bean id="newsService" class="by.epam.newsmanagement.service.impl.NewsService">
+		<property name="newsDao" ref="newsDao" />
 	</bean>
-	
+
+	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="jdbcUrl" value="jdbc:oracle:thin://localhost:1521/orcl" />
+		<property name="username" value="system" />
+		<property name="password" value="Oracle_1" />
+	</bean>
+
 
 </beans>
