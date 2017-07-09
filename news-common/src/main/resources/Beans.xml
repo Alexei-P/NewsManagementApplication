@@ -15,6 +15,7 @@
 		<property name="tagDao" ref="tagDao" />
 		<property name="authorDao" ref="authorDao"/>
 	</bean>
+	
 	<bean id="tagDao" class="by.epam.newsmanagement.dao.impl.TagDao" />
 	<bean id="userDao" class="by.epam.newsmanagement.dao.impl.UserDao" />
 

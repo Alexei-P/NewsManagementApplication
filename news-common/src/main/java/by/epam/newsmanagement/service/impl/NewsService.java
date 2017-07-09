@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import by.epam.newsmanagement.dao.impl.CommentDao;
 import by.epam.newsmanagement.dao.impl.NewsDao;
+import by.epam.newsmanagement.dao.interfaces.ICommentDao;
 import by.epam.newsmanagement.dao.interfaces.INewsDao;
 import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.entity.News;
@@ -22,14 +23,14 @@ public class NewsService implements INewsService {
 
 	public static org.apache.logging.log4j.Logger Logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 	
-	private NewsDao newsDao;
-	private CommentDao commentDao;
+	private INewsDao newsDao;
+	private ICommentDao commentDao;
 	
 	public NewsService() {
 		super();
 	}
 
-	public NewsDao getNewsDao() {
+	public INewsDao getNewsDao() {
 		return newsDao;
 	}
 
@@ -37,7 +38,7 @@ public class NewsService implements INewsService {
 		this.newsDao = newsDao;
 	}
 
-	public CommentDao getCommentDao() {
+	public ICommentDao getCommentDao() {
 		return commentDao;
 	}
 
@@ -71,10 +72,16 @@ public class NewsService implements INewsService {
 	}
 
 	@Override
-	public ArrayList<News> getTheMostPopularNews(int numberOfComments) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<News> getTheMostPopularNews(int newsQuantity) throws ServiceException {
+		ArrayList<News> newsList = null;
+		try{
+			newsList = newsDao.getTheMostPopularNews(newsQuantity);
+		}catch(DaoException e){
+			throw new ServiceException(e);
+		}
+		return newsList;
 	}
+	
 
 	@Override
 	public News getNews(int newsId) throws ServiceException {
@@ -100,8 +107,12 @@ public class NewsService implements INewsService {
 	}
 
 	@Override
-	public void editNews(int newsId) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void editNews(int newsId, News updatedNews) throws ServiceException {
+		try{
+			newsDao.editNews(newsId, updatedNews);
+		}catch(DaoException e){
+			throw new ServiceException(e);
+		}
 
 	}
 
@@ -126,4 +137,13 @@ public class NewsService implements INewsService {
 
 	}
 
+	@Override
+	public void deleteComment(int commentId) throws ServiceException {
+		try {
+			newsDao.deleteComment(commentId);
+		} catch (DaoException e) {
+			Logger.info("SQLException during comment deletion");
+			throw new ServiceException(e);
+		}	
+	}
 }

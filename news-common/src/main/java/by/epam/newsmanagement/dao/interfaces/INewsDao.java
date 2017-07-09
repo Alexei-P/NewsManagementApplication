@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import by.epam.newsmanagement.entity.News;
 import by.epam.newsmanagement.exception.dao.DaoException;
+import by.epam.newsmanagement.exception.service.ServiceException;
 
 public interface INewsDao {
 	public void addNews(News news) throws DaoException;
 
 	public void deleteNewsById(int id) throws DaoException;
 
-	public void updateNews(int id, String content) throws DaoException;
+	public void editNews(int id, News updatedNews) throws DaoException;
 
 	public void addComment(int id, String comment) throws DaoException;
 
@@ -25,4 +26,6 @@ public interface INewsDao {
 	public ArrayList<String> getCommentsToNews(int id) throws DaoException;
 	
 	public News getNewsById (int newsIs) throws DaoException;
+	
+	public ArrayList<News> getTheMostPopularNews (int newsQuantity) throws DaoException;
 }
