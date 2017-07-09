@@ -1,6 +1,6 @@
 package by.epam.newsmanagement.dao.interfaces;
 
-import by.epam.newsmanagement.entity.User;
+import by.epam.newsmanagement.entity.user.User;
 import by.epam.newsmanagement.exception.dao.DaoException;
 
 public interface IUserDao {

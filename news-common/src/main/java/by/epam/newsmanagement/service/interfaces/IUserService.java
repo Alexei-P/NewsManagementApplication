@@ -1,6 +1,6 @@
 package by.epam.newsmanagement.service.interfaces;
 
-import by.epam.newsmanagement.entity.User;
+import by.epam.newsmanagement.entity.user.User;
 import by.epam.newsmanagement.exception.service.ServiceException;
 
 public interface IUserService {

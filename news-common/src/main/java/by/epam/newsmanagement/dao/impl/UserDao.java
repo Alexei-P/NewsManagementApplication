@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.newsmanagement.dao.interfaces.IUserDao;
-import by.epam.newsmanagement.entity.User;
+import by.epam.newsmanagement.entity.user.User;
+import by.epam.newsmanagement.entity.user.UserRole;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.utils.ConnectorDb;
 
@@ -39,7 +40,7 @@ public class UserDao implements IUserDao {
 			}
 		} catch (SQLException e) {
 			logger.info("Connection/Statement was not created");
-			e.printStackTrace();
+			throw new DaoException(e);		
 		}
 		return user;
 	}
@@ -50,11 +51,12 @@ public class UserDao implements IUserDao {
 		if (isUserExist == false) {
 			try (Connection connection = ConnectorDb.getConnection();
 					PreparedStatement ps = connection.prepareStatement(
-							"INSERT INTO news_user (u_login, u_password, u_name, u_email) VALUES (?,?,?,?)")) {
+							"INSERT INTO news_user (u_login, u_password, u_name, u_email, u_role) VALUES (?,?,?,?)")) {
 				ps.setString(1, login);
 				ps.setString(2, password);
 				ps.setString(3, name);
 				ps.setString(4, email);
+				ps.setString(5, UserRole.USER.toString());
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				logger.info("Connection/Statement was not created");
