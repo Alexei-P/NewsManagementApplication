@@ -26,8 +26,8 @@
 	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="jdbcUrl" value="jdbc:oracle:thin://localhost:1521/orcl" />
-		<property name="username" value="system" />
+		<property name="jdbcUrl" value="jdbc:oracle:thin://localhost:1521/newsmnt_copy.minsk.epam.com" />
+		<property name="username" value="unit_test2" />
 		<property name="password" value="Oracle_1" />
 	</bean>
 

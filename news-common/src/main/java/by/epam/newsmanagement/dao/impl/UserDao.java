@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import by.epam.newsmanagement.dao.interfaces.IUserDao;
 import by.epam.newsmanagement.entity.user.User;
@@ -13,6 +14,7 @@ import by.epam.newsmanagement.entity.user.UserRole;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.utils.ConnectorDb;
 
+@Component
 public class UserDao implements IUserDao {
 	public static void main(String[] args) {
 		IUserDao userDao = new UserDao();

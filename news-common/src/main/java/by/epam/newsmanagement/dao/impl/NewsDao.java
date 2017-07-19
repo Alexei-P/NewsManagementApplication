@@ -14,10 +14,10 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import by.epam.newsmanagement.dao.factory.DaoFactory;
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
 import by.epam.newsmanagement.dao.interfaces.INewsDao;
 import by.epam.newsmanagement.dao.interfaces.ITagDao;
@@ -32,7 +32,9 @@ import by.epam.newsmanagement.utils.ConnectorDb;
 public class NewsDao implements INewsDao {
 	public static org.apache.logging.log4j.Logger Logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 
+	@Autowired
 	private ITagDao tagDao;
+	@Autowired
 	private IAuthorDao authorDao;
 
 	public NewsDao() {

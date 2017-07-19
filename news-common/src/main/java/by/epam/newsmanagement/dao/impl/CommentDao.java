@@ -7,14 +7,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import by.epam.newsmanagement.dao.factory.DaoFactory;
+import org.springframework.stereotype.Component;
+
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
 import by.epam.newsmanagement.dao.interfaces.ICommentDao;
 import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.utils.ConnectorDb;
 
+@Component
 public class CommentDao implements ICommentDao{
+
+	private IAuthorDao authorDao;
+	
+	public IAuthorDao getAuthorDao() {
+		return authorDao;
+	}
+
+	public void setAuthorDao(IAuthorDao authorDao) {
+		this.authorDao = authorDao;
+	}
 
 	public static org.apache.logging.log4j.Logger Logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 	@Override
@@ -99,9 +111,6 @@ public class CommentDao implements ICommentDao{
 		
 		Comment comment = new Comment();
 		ResultSet rs = null;
-		
-		DaoFactory daoFactory = DaoFactory.getDaoFactory();
-		IAuthorDao authorDao = daoFactory.getAuthorDao();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("SELECT * FROM comment_entity WHERE comment_id = ?")
 				){

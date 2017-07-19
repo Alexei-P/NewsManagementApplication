@@ -6,11 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
+
 import by.epam.newsmanagement.dao.interfaces.ITagDao;
 import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.utils.ConnectorDb;
 
+@Component
 public class TagDao implements ITagDao {
 	public static void main(String[] args) { // TEST
 		ITagDao tagDao = new TagDao();

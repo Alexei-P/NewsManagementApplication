@@ -19,11 +19,14 @@ import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.exception.service.ServiceException;
 import by.epam.newsmanagement.service.interfaces.INewsService;
 
+@Service
 public class NewsService implements INewsService {
 
 	public static org.apache.logging.log4j.Logger Logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 	
+	@Autowired
 	private INewsDao newsDao;
+	@Autowired
 	private ICommentDao commentDao;
 	
 	public NewsService() {

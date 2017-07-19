@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javax.sql.rowset.CachedRowSet;
 
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
 import by.epam.newsmanagement.entity.author.Author;
@@ -15,6 +16,7 @@ import by.epam.newsmanagement.entity.author.AuthorState;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.utils.ConnectorDb;
 
+@Component
 public class AuthorDao implements IAuthorDao {
 
 	public static Logger logger = org.apache.logging.log4j.LogManager.getLogger("logger");
