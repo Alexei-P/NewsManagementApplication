@@ -5,15 +5,31 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import by.epam.newsmanagement.entity.author.Author;
 
-public class News implements Serializable{
-	
+@Entity
+@Table(name = "NEWS")
+public class News implements Serializable {
+
 	private static final long serialVersionUID = 1L;
+
+	@Id
 	int id;
+
+	@Column(name = "MAIN_TITLE")
 	String mainTitle;
+
+	@Column(name = "SHORT_TITLE")
 	String shortTitle;
+
+	@Column(name = "N_CONTENT")
 	String content;
+
 	Author author;
 	LocalDate publicationDate;
 	LocalDate modificationDate;
@@ -190,8 +206,8 @@ public class News implements Serializable{
 		if (views != other.views)
 			return false;
 		return true;
-	}	
-	
+	}
+
 	@Override
 	public String toString() {
 		return "News [id=" + id + ", mainTitle=" + mainTitle + ", shortTitle=" + shortTitle + ", content=" + content
