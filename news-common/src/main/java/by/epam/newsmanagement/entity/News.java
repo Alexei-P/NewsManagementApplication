@@ -30,6 +30,7 @@ public class News implements Serializable {
 	@Column(name = "N_CONTENT")
 	String content;
 
+	@Column(name = "")
 	Author author;
 	LocalDate publicationDate;
 	LocalDate modificationDate;

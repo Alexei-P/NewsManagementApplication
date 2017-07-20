@@ -14,21 +14,6 @@ import by.epam.newsmanagement.entity.News;
 import by.epam.newsmanagement.exception.service.ServiceException;
 import by.epam.newsmanagement.service.impl.NewsService;
 
-/*import static org.springframework.web.bind.annotation.RequestMethod.*;
-
-import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import by.epam.newsmanagement.entity.News;
-import by.epam.newsmanagement.exception.service.ServiceException;
-import by.epam.newsmanagement.service.impl.NewsService;*/
-
-
 
 @RestController
 @RequestMapping("/")
