@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import by.epam.newsmanagement.dao.impl.AuthorDao;
 import by.epam.newsmanagement.entity.News;
+import by.epam.newsmanagement.entity.author.Author;
 import by.epam.newsmanagement.exception.service.ServiceException;
+import by.epam.newsmanagement.service.impl.AuthorService;
 import by.epam.newsmanagement.service.impl.NewsService;
 
 
@@ -21,6 +25,9 @@ public class HomeController {
 	
 	@Autowired
 	NewsService newsService;
+	
+	@Autowired
+	AuthorService authorService;
 
 	public HomeController() {
 		System.out.println("HOME CONTROLLER");
@@ -56,6 +63,20 @@ public class HomeController {
 		return new ResponseEntity<News>(news, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/getAuthor/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Author> getAuthorById(@PathVariable("id") int authorId){
+		Author author = null;
+			try {
+				author = authorService.getAuthorById(authorId);
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (author == null) return new ResponseEntity<Author>(HttpStatus.NO_CONTENT);
+			
+			return new ResponseEntity<Author>(author, HttpStatus.NO_CONTENT);
+	}
+	
 	@RequestMapping(value = "/getTags", method = RequestMethod.GET)
 	public ResponseEntity<String> getTag() {
 		return new ResponseEntity<String>("TEST", HttpStatus.OK);

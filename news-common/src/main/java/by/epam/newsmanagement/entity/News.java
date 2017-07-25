@@ -5,15 +5,28 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import by.epam.newsmanagement.entity.author.Author;
 
 @Entity
 @Table(name = "NEWS")
+@NamedQueries({
+		@NamedQuery(name = "getAllNews", query = "SELECT news FROM News news"),
+		@NamedQuery(name = "getTheMostPopularNews", query = "SELECT news FROM News news ") //TODO top 
+})
 public class News implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,14 +43,41 @@ public class News implements Serializable {
 	@Column(name = "N_CONTENT")
 	String content;
 
-	@Column(name = "")
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(
+			name="AUTHOR",
+			joinColumns = @JoinColumn(name="A_ID"),
+			inverseJoinColumns = @JoinColumn(name="AUTHOR_ID")
+			)
 	Author author;
+	
+	@Column(name = "N_DATE")
 	LocalDate publicationDate;
+	
+	@Column(name = "MODIF_DATE")
 	LocalDate modificationDate;
+	
+	@Column(name = "PATH_TO_PHOTO")
 	String pathToPhoto;
+	
+	@Column(name = "VIEW_QTY")
 	int views;
-	ArrayList<String> tagList;
-	ArrayList<String> commentsList;
+	
+	@ManyToMany
+	@JoinTable(
+			name = "NEWS_TAG",
+			joinColumns = @JoinColumn(name = "FK_NEWS"),
+			inverseJoinColumns  = @JoinColumn(name = "FK_TAG")
+			)
+	ArrayList<Tag> tagList;
+	
+	@OneToMany
+	@JoinTable(
+			name = "NEWS_COMMENT",
+			joinColumns = @JoinColumn(name = "NEWS_ID"),
+			inverseJoinColumns  = @JoinColumn(name = "COMMENT_ID")
+			)
+	ArrayList<Comment> commentsList;
 
 	public News() {
 	}
@@ -114,19 +154,19 @@ public class News implements Serializable {
 		this.pathToPhoto = pathToPhoto;
 	}
 
-	public ArrayList<String> getTagList() {
+	public ArrayList<Tag> getTagList() {
 		return tagList;
 	}
 
-	public void setTagList(ArrayList<String> tagList) {
+	public void setTagList(ArrayList<Tag> tagList) {
 		this.tagList = tagList;
 	}
 
-	public ArrayList<String> getCommentsList() {
+	public ArrayList<Comment> getCommentsList() {
 		return commentsList;
 	}
 
-	public void setCommentsList(ArrayList<String> commentsList) {
+	public void setCommentsList(ArrayList<Comment> commentsList) {
 		this.commentsList = commentsList;
 	}
 

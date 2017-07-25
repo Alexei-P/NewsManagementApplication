@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.sql.rowset.CachedRowSet;
 
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
@@ -21,9 +24,12 @@ public class AuthorDao implements IAuthorDao {
 
 	public static Logger logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 
+	@Autowired
+	private EntityManager entityManager;
+	
 	@Override
 	public void addAuthor(String authorName, AuthorState authorState) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("INSERT INTO author (author, state) VALUES(?, ?)")) {
 			ps.setString(1, authorName);
 			ps.setString(2, authorState.toString());
@@ -31,7 +37,14 @@ public class AuthorDao implements IAuthorDao {
 		} catch (SQLException e) {
 			logger.info("SQL Exception");
 			e.printStackTrace();
-		}
+		}*/
+		Author author = new Author(authorName, authorState);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(author);
+		entityTransaction.commit();
+		
+		entityManager.close();
 	}
 
 	@Override
@@ -88,7 +101,7 @@ public class AuthorDao implements IAuthorDao {
 
 	@Override
 	public Author getAuthorById(int authorId) throws DaoException {
-		ResultSet rs = null;
+		/*ResultSet rs = null;
 		Author author = new Author();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("SELECT * FROM author WHERE a_id = ?")){
@@ -105,21 +118,8 @@ public class AuthorDao implements IAuthorDao {
 		} catch (SQLException e) {
 			logger.info("SQL Exception select author by Id");
 			throw new DaoException(e);
-		}
-		
-		/*try {
-			while (rs.next()){
-				int i = rs.getInt(3);
-				String name = rs.getString(1);
-				String authorState = rs.getString(2);
-				author.setId(i);
-				author.setName(name);
-				author.setAuthorState(AuthorState.valueOf(authorState));
-			}
-		} catch (SQLException e) {
-			logger.info("SQL Exception while result set parsing");
-			throw new DaoException(e);
 		}*/
+		Author author = entityManager.find(Author.class, authorId);
 		return author;
 	}
 

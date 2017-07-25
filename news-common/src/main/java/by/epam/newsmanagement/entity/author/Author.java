@@ -2,12 +2,36 @@ package by.epam.newsmanagement.entity.author;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Author")
 public class Author implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Id
 	int id;
+	
+	@Column(name = "AUTHOR")
 	String name;
+	
+	@Column(name = "STATE")
 	AuthorState authorState;
+	
+	public Author(String name, AuthorState authorState) {
+		this.name = name;
+		this.authorState = authorState;
+	}
+	
+	public Author(){
+		
+	}
+	
 	public int getId() {
 		return id;
 	}

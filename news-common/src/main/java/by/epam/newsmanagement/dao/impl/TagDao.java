@@ -5,7 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import by.epam.newsmanagement.dao.interfaces.ITagDao;
@@ -15,6 +21,10 @@ import by.epam.newsmanagement.utils.ConnectorDb;
 
 @Component
 public class TagDao implements ITagDao {
+	
+	@Autowired
+	EntityManager entityManager;
+	
 	public static void main(String[] args) { // TEST
 		ITagDao tagDao = new TagDao();
 		try {
@@ -94,18 +104,26 @@ public class TagDao implements ITagDao {
 	}
 
 	public void deleteTag(String tag) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("DELETE FROM tag WHERE tag = ?")) {
 			ps.setString(1, tag);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			logger.info("Connection/Statement was not established");
 			e.printStackTrace();
-		}
+		}*/
+		EntityTransaction transaction = entityManager.getTransaction();
+		Query query = entityManager.createNamedQuery("deleteTag");
+		query.setParameter("tag", tag);
+		transaction.begin();
+		query.executeUpdate();
+		transaction.commit();
+		
+		entityManager.close();		
 	}
 
 	public ArrayList<Tag> getAllTags() throws DaoException {
-		ArrayList<Tag> tagList = new ArrayList<Tag>();
+		/*ArrayList<Tag> tagList = new ArrayList<Tag>();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("SELECT * FROM tag");
 				ResultSet rs = ps.executeQuery()) {
@@ -118,7 +136,18 @@ public class TagDao implements ITagDao {
 			logger.info("Connection/Statement was not established");
 			e.printStackTrace();
 		}
+		return tagList;*/
+		ArrayList<Tag> tagList = null;
+		EntityTransaction transaction = entityManager.getTransaction();
+		Query query = entityManager.createNamedQuery("getAllTags");
+		transaction.begin();
+		tagList = (ArrayList<Tag>) query.getResultList();
+		transaction.commit();
+		
+		entityManager.close();
+		
 		return tagList;
+		
 	}
 
 	@Override
@@ -131,9 +160,6 @@ public class TagDao implements ITagDao {
 			ps.setInt(1, newsId);
 			rs = ps.executeQuery();
 			while (rs.next()){
-				//Tag tag = new Tag();
-				//tag.setId(rs.getInt(1));
-				//tag.setTag(rs.getString(2));
 				String tag = rs.getString(1);		
 				tagList.add(tag);
 			}
@@ -141,20 +167,8 @@ public class TagDao implements ITagDao {
 			logger.info("Connection/Statement was not established");
 			throw new DaoException(e);
 		}
-		
-		/*try {
-			while (rs.next()){
-				//Tag tag = new Tag();
-				//tag.setId(rs.getInt(1));
-				//tag.setTag(rs.getString(2));
-				String tag = rs.getString(2);		
-				tagList.add(tag);
-			}
-		} catch (SQLException e) {
-			logger.info("SQLException during result set parsing");
-			throw new DaoException(e);
-		}*/
 		return tagList;
+		
 	}
 
 }

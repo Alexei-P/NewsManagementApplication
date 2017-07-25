@@ -3,20 +3,43 @@ package by.epam.newsmanagement.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import by.epam.newsmanagement.entity.author.Author;
 
+@Entity
+@Table(name = "COMMENT_ENTITY")
 public class Comment implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
+	
+	@Id
 	int id;
+	
+	@Column(name = "PUBLICATION_DATE")
 	LocalDate publicationDate;
+	
+	@ManyToOne()
+	@JoinTable(
+			name = "AUTHOR",
+			joinColumns = @JoinColumn(name = "AUTHOR_ID"),
+			inverseJoinColumns  = @JoinColumn(name = "A_ID")
+			)
 	Author author;
+	
+	@Column(name = "TEXT")
 	String text;
+	
 	public Comment() {
 
 	}
+	
 	public int getId() {
 		return id;
 	}

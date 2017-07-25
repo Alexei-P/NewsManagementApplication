@@ -12,6 +12,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +24,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
+import by.epam.newsmanagement.dao.interfaces.ICommentDao;
 import by.epam.newsmanagement.dao.interfaces.INewsDao;
 import by.epam.newsmanagement.dao.interfaces.ITagDao;
+import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.entity.News;
 import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.entity.author.Author;
@@ -34,8 +41,15 @@ public class NewsDao implements INewsDao {
 
 	@Autowired
 	private ITagDao tagDao;
+	
 	@Autowired
 	private IAuthorDao authorDao;
+	
+	@Autowired
+	private ICommentDao commentDao;
+	
+	@Autowired
+	private EntityManager entityManager;
 
 	public NewsDao() {
 	}
@@ -69,7 +83,7 @@ public class NewsDao implements INewsDao {
 	@Override
 	public void addNews(News news) throws DaoException {
 
-		try (Connection connection = ConnectorDb.getConnection(); // news
+		/*try (Connection connection = ConnectorDb.getConnection(); // news
 				PreparedStatement ps = connection
 						.prepareStatement("INSERT INTO news (main_title, short_title, n_content, author_id, "
 								+ "n_date, modif_date, path_to_photo, view_qty) VALUES(?,?,?,?,?,?,?,?)")) {
@@ -101,26 +115,34 @@ public class NewsDao implements INewsDao {
 		} catch (SQLException e) {
 			Logger.info("SQLException during news adding");
 			throw new DaoException(e);
-		}
+		}*/
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(news);
+		entityTransaction.commit();
+		
+		entityManager.close();
 
 	}
 
 	@Override
 	public void deleteNewsById(int id) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("DELETE FROM news WHERE id = ?")) {
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			Logger.info("SQLException during the deletion");
 			throw new DaoException(e);
-		}
-
+		}*/
+		Query query = entityManager.createNamedQuery("deleteNewsById");
+		query.setParameter("id", id);
+		query.executeUpdate();
 	}
 
 	@Override
 	public void editNews(int id, News updatedNews) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+	/*	try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement(
 						"UPDATE news SET main_title = ?, short_title = ?," + " n_content = ?, author_id = ?,"
 								+ " n_date = ?, modif_date = ?, path_to_photo = ?, view_qty = ? WHERE id = ?")) {
@@ -136,12 +158,22 @@ public class NewsDao implements INewsDao {
 		} catch (SQLException e) {
 			Logger.info("SQLException during news adding");
 			throw new DaoException(e);
-		}
+		}*/
+		News oldNews = entityManager.find(News.class, id);
+		oldNews.setMainTitle(updatedNews.getMainTitle());
+		oldNews.setShortTitle(updatedNews.getShortTitle());
+		oldNews.setContent(updatedNews.getContent());
+		oldNews.setAuthor(updatedNews.getAuthor());
+		oldNews.setPublicationDate(updatedNews.getPublicationDate());
+		oldNews.setModificationDate(LocalDate.now());
+		oldNews.setPathToPhoto(updatedNews.getPathToPhoto());
+		oldNews.setViews(updatedNews.getViews());
+		entityManager.merge(oldNews);
 	}
 
 	@Override
-	public void addComment(int id, String comment) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+	public void addComment(int id, Comment comment) throws DaoException {
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
 						.prepareStatement("INSERT INTO news_comment (nc_comment, news_id) VALUES(?,?)")) {
 			ps.setString(1, comment);
@@ -150,24 +182,28 @@ public class NewsDao implements INewsDao {
 		} catch (SQLException e) {
 			Logger.info("SQLException during adding comment");
 			throw new DaoException(e);
-		}
+		}*/
+		News oldNews = entityManager.find(News.class, id);
+		oldNews.getCommentsList().add(comment);
+		entityManager.merge(oldNews);		
 	}
 
 	@Override
 	public void deleteComment(int id) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("DELETE FROM news_comment WHERE c_id = ?")) {
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			Logger.info("SQLException during comment deletion");
 			throw new DaoException(e);
-		}
+		}*/
+		commentDao.deleteComment(id);
 	}
 
 	@Override
 	public ArrayList<News> getAllNews() throws DaoException {
-		ResultSet rs = null;
+		/*ResultSet rs = null;
 		ArrayList<News> newsList = new ArrayList<News>();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
@@ -201,13 +237,22 @@ public class NewsDao implements INewsDao {
 		} catch (SQLException e) {
 			Logger.info("SQLException: getAllNews");
 			throw new DaoException(e);
-		}
+		}*/
+		ArrayList<News> newsList = new ArrayList<News>();
+		Query query = entityManager.createNamedQuery("getAllNews");
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		newsList = (ArrayList<News>) query.getResultList();
+		transaction.commit();
+		
+		entityManager.close();
+		
 		return newsList;
 	}
 
 	@Override
-	public void addTagToNews(int newsId, String tag) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+	public void addTagToNews(int newsId, Tag tag) throws DaoException {
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
 						.prepareStatement("INSERT INTO news_tag (fk_news, fk_tag)" + "VALUES (?,?)")) {
 			ps.setInt(1, newsId);
@@ -216,12 +261,16 @@ public class NewsDao implements INewsDao {
 		} catch (SQLException e) {
 			Logger.info("SQLException during comment deletion (ResultSet closing)");
 			throw new DaoException(e);
-		}
+		}*/
+		
+		News oldNews = entityManager.find(News.class, newsId);
+		oldNews.getTagList().add(tag);
+		entityManager.merge(oldNews);
 	}
 
 	@Override
 	public void deleteTagFromNews(int newsId, String tag) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
 						.prepareStatement("DELETE FROM news_tag" + "WHERE fk_news = ? AND fk_tag = ?")) {
 			ps.setInt(1, newsId);
@@ -230,8 +279,23 @@ public class NewsDao implements INewsDao {
 		} catch (SQLException e) {
 			Logger.info("SQLException during tag deletion (ResultSet closing)");
 			throw new DaoException(e);
+		}*/
+		News oldNews = entityManager.find(News.class, newsId);
+		ArrayList<Tag> tagList = oldNews.getTagList();
+		Iterator<Tag> iterator = tagList.iterator();
+		while(iterator.hasNext()){
+			Tag tagTemp = iterator.next();
+			if (tagTemp.getTag().equals(tag)){
+				iterator.remove();
+				break;
+			}
 		}
-
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		entityManager.merge(oldNews);
+		transaction.commit();
+		
+		entityManager.close();
 	}
 
 	@Override
@@ -267,7 +331,7 @@ public class NewsDao implements INewsDao {
 
 	@Override
 	public News getNewsById(int newsId) throws DaoException {
-		ResultSet rs = null;
+		/*ResultSet rs = null;
 		News news = new News();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection
@@ -301,6 +365,9 @@ public class NewsDao implements INewsDao {
 			Logger.info("SQLException: while getting news by Id");
 			e.printStackTrace();
 		}
+		return news;*/
+		News news = null;
+		news = entityManager.find(News.class, newsId);
 		return news;
 	}
 
@@ -322,7 +389,7 @@ public class NewsDao implements INewsDao {
 	}
 
 	@Override
-	public ArrayList<News> getTheMostPopularNews(int newsQuantity) throws DaoException {
+	public ArrayList<News> getTheMostPopularNews(int newsQuantity) throws DaoException { //TODO top
 		ResultSet rs = null;
 		ArrayList<News> newsList = new ArrayList<News>();
 		try (Connection connection = ConnectorDb.getConnection();

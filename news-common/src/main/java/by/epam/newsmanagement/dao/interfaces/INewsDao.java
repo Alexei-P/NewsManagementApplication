@@ -2,9 +2,10 @@ package by.epam.newsmanagement.dao.interfaces;
 
 import java.util.ArrayList;
 
+import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.entity.News;
+import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.exception.dao.DaoException;
-import by.epam.newsmanagement.exception.service.ServiceException;
 
 public interface INewsDao {
 	public void addNews(News news) throws DaoException;
@@ -13,13 +14,13 @@ public interface INewsDao {
 
 	public void editNews(int id, News updatedNews) throws DaoException;
 
-	public void addComment(int id, String comment) throws DaoException;
+	public void addComment(int id, Comment comment) throws DaoException;
 
 	public void deleteComment(int id) throws DaoException;
 
 	public ArrayList<News> getAllNews() throws DaoException;
 
-	public void addTagToNews(int newsId, String tag) throws DaoException;
+	public void addTagToNews(int newsId, Tag tag) throws DaoException;
 
 	public void deleteTagFromNews(int newsId, String tag) throws DaoException;
 	

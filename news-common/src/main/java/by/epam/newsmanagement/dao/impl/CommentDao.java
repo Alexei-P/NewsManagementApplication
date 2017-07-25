@@ -7,6 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import by.epam.newsmanagement.dao.interfaces.IAuthorDao;
@@ -18,6 +22,9 @@ import by.epam.newsmanagement.utils.ConnectorDb;
 @Component
 public class CommentDao implements ICommentDao{
 
+	@Autowired
+	EntityManager entityManager;
+	
 	private IAuthorDao authorDao;
 	
 	public IAuthorDao getAuthorDao() {
@@ -78,7 +85,7 @@ public class CommentDao implements ICommentDao{
 
 	@Override
 	public void deleteComment(int commentId) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("DELETE FROM comment_entity WHERE comment_id = ?")
 				){
 			ps.setInt(1, commentId);
@@ -86,8 +93,14 @@ public class CommentDao implements ICommentDao{
 		}catch(SQLException e){
 			Logger.info("SQL exception during comment deletion");
 			throw new DaoException(e);
-		}
+		}*/
+		Comment comment = entityManager.find(Comment.class, commentId);
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		entityManager.remove(comment);
+		transaction.commit();
 		
+		entityManager.close();		
 	}
 
 	@Override

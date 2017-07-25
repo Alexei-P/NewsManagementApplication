@@ -1,7 +1,26 @@
 package by.epam.newsmanagement.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TAG")
+@NamedQueries({
+		@NamedQuery(name = "deleteTag", query = "DELETE FROM tag where tag.tag = :tag"),
+		@NamedQuery(name = "getAllTags", query = "SELECT tag FROM Tag tag")
+})
 public class Tag {
+	
+	@Id
 	int id;
+	
+	@Column(name = "TAG")
+	@ManyToMany(mappedBy = "tagList")
 	String tag;
 	
 	public Tag(int id, String tag) {
