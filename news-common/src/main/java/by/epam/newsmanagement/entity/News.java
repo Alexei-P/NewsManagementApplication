@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,23 +26,22 @@ import by.epam.newsmanagement.entity.author.Author;
 @Table(name = "NEWS")
 @NamedQueries({
 		@NamedQuery(name = "getAllNews", query = "SELECT news FROM News news"),
-		@NamedQuery(name = "getTheMostPopularNews", query = "SELECT news FROM News news ") //TODO top 
 })
 public class News implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	int id;
+	private int id;
 
 	@Column(name = "MAIN_TITLE")
-	String mainTitle;
+	private String mainTitle;
 
 	@Column(name = "SHORT_TITLE")
-	String shortTitle;
+	private String shortTitle;
 
 	@Column(name = "N_CONTENT")
-	String content;
+	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(
@@ -49,19 +49,19 @@ public class News implements Serializable {
 			joinColumns = @JoinColumn(name="A_ID"),
 			inverseJoinColumns = @JoinColumn(name="AUTHOR_ID")
 			)
-	Author author;
+	private Author author;
 	
 	@Column(name = "N_DATE")
-	LocalDate publicationDate;
+	private LocalDate publicationDate;
 	
 	@Column(name = "MODIF_DATE")
-	LocalDate modificationDate;
+	private LocalDate modificationDate;
 	
 	@Column(name = "PATH_TO_PHOTO")
-	String pathToPhoto;
+	private String pathToPhoto;
 	
 	@Column(name = "VIEW_QTY")
-	int views;
+	private int views;
 	
 	@ManyToMany
 	@JoinTable(
@@ -69,7 +69,7 @@ public class News implements Serializable {
 			joinColumns = @JoinColumn(name = "FK_NEWS"),
 			inverseJoinColumns  = @JoinColumn(name = "FK_TAG")
 			)
-	ArrayList<Tag> tagList;
+	private List<Tag> tagList;
 	
 	@OneToMany
 	@JoinTable(
@@ -77,7 +77,7 @@ public class News implements Serializable {
 			joinColumns = @JoinColumn(name = "NEWS_ID"),
 			inverseJoinColumns  = @JoinColumn(name = "COMMENT_ID")
 			)
-	ArrayList<Comment> commentsList;
+	private List<Comment> commentsList;
 
 	public News() {
 	}
@@ -154,7 +154,7 @@ public class News implements Serializable {
 		this.pathToPhoto = pathToPhoto;
 	}
 
-	public ArrayList<Tag> getTagList() {
+	public List<Tag> getTagList() {
 		return tagList;
 	}
 
@@ -162,11 +162,11 @@ public class News implements Serializable {
 		this.tagList = tagList;
 	}
 
-	public ArrayList<Comment> getCommentsList() {
+	public List<Comment> getCommentsList() {
 		return commentsList;
 	}
 
-	public void setCommentsList(ArrayList<Comment> commentsList) {
+	public void setCommentsList(List<Comment> commentsList) {
 		this.commentsList = commentsList;
 	}
 

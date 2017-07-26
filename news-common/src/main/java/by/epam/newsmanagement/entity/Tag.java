@@ -1,5 +1,9 @@
 package by.epam.newsmanagement.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,18 +15,33 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TAG")
 @NamedQueries({
-		@NamedQuery(name = "deleteTag", query = "DELETE FROM tag where tag.tag = :tag"),
+		@NamedQuery(name = "deleteTag", query = "DELETE FROM Tag tag where tag.tag = :tag"),
 		@NamedQuery(name = "getAllTags", query = "SELECT tag FROM Tag tag")
 })
-public class Tag {
+public class Tag implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	int id;
+	private int id;
 	
 	@Column(name = "TAG")
-	@ManyToMany(mappedBy = "tagList")
-	String tag;
+	private String tag;
 	
+	@ManyToMany(mappedBy = "tagList")
+	private List<News> newsList;
+
+	public List<News> getNewsList() {
+		return newsList;
+	}
+
+	public void setNewsList(List<News> newsList) {
+		this.newsList = newsList;
+	}
+
 	public Tag(int id, String tag) {
 		super();
 		this.id = id;
@@ -49,6 +68,7 @@ public class Tag {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + id;
+		result = prime * result + ((newsList == null) ? 0 : newsList.hashCode());
 		result = prime * result + ((tag == null) ? 0 : tag.hashCode());
 		return result;
 	}
@@ -62,6 +82,11 @@ public class Tag {
 			return false;
 		Tag other = (Tag) obj;
 		if (id != other.id)
+			return false;
+		if (newsList == null) {
+			if (other.newsList != null)
+				return false;
+		} else if (!newsList.equals(other.newsList))
 			return false;
 		if (tag == null) {
 			if (other.tag != null)

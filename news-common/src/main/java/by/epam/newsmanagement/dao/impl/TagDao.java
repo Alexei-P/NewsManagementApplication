@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.logging.log4j.Logger;
@@ -22,7 +23,7 @@ import by.epam.newsmanagement.utils.ConnectorDb;
 @Component
 public class TagDao implements ITagDao {
 	
-	@Autowired
+	@PersistenceContext
 	EntityManager entityManager;
 	
 	public static void main(String[] args) { // TEST

@@ -74,7 +74,7 @@ public class HomeController {
 			}
 			if (author == null) return new ResponseEntity<Author>(HttpStatus.NO_CONTENT);
 			
-			return new ResponseEntity<Author>(author, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Author>(author, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/getTags", method = RequestMethod.GET)

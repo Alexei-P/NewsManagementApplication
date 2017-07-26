@@ -35,9 +35,9 @@ public class AuthorService implements IAuthorService {
 	}
 
 	@Override
-	public void deleteAuthorLogically(String authorName) throws ServiceException {
+	public void deleteAuthorLogically(Author author) throws ServiceException {
 		try {
-			authorDao.deleteAuthorLogically(authorName);
+			authorDao.deleteAuthorLogically(author);
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
@@ -45,9 +45,9 @@ public class AuthorService implements IAuthorService {
 	}
 
 	@Override
-	public void deleteAuthorPhisically(String authorName) throws ServiceException {
+	public void deleteAuthorPhisically(Author author) throws ServiceException {
 		try {
-			authorDao.deleteAuthorPhisically(authorName);
+			authorDao.deleteAuthorPhisically(author);
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
@@ -55,19 +55,9 @@ public class AuthorService implements IAuthorService {
 	}
 
 	@Override
-	public void updateAuthorState(String authorName, AuthorState authorState) throws ServiceException {
+	public void updateAuthorState(Author author, AuthorState authorState) throws ServiceException {
 		try {
-			authorDao.updateAuthorState(authorName, authorState);
-		} catch (DaoException e) {
-			throw new ServiceException(e);
-		}
-
-	}
-
-	@Override
-	public void getAuthorIdByName(String authorName) throws ServiceException {
-		try {
-			authorDao.getAuthorIdByName(authorName);
+			authorDao.updateAuthorState(author, authorState);
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}

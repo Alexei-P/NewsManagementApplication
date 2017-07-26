@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.sql.rowset.CachedRowSet;
 
 import org.apache.logging.log4j.Logger;
@@ -27,6 +29,15 @@ public class AuthorDao implements IAuthorDao {
 	@Autowired
 	private EntityManager entityManager;
 	
+	
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+	@PersistenceContext
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
 	@Override
 	public void addAuthor(String authorName, AuthorState authorState) throws DaoException {
 		/*try (Connection connection = ConnectorDb.getConnection();
@@ -48,33 +59,45 @@ public class AuthorDao implements IAuthorDao {
 	}
 
 	@Override
-	public void deleteAuthorLogically(String authorName) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+	public void deleteAuthorLogically(Author author) throws DaoException {
+/*		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("UPDATE author SET state = D WHERE author = ?")) {
 			ps.setString(1, authorName);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			logger.info("SQL Exception");
 			e.printStackTrace();
-		}
-
+		}*/
+		author.setAuthorState(AuthorState.DELETED);
+		EntityTransaction transcation = entityManager.getTransaction();
+		transcation.begin();
+		entityManager.merge(author);
+		transcation.commit();
+		
+		entityManager.close();
 	}
 
 	@Override
-	public void deleteAuthorPhisically(String authorName) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+	public void deleteAuthorPhisically(Author author) throws DaoException {
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("DELETE FROM author WHERE author = ?")) {
 			ps.setString(1, authorName);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			logger.info("SQL Exception");
 			e.printStackTrace();
-		}
+		}*/
+		EntityTransaction transcation = entityManager.getTransaction();
+		transcation.begin();
+		entityManager.remove(author);
+		transcation.commit();
+		
+		entityManager.close();
 	}
 
 	@Override
-	public void updateAuthorState(String authorName, AuthorState authorState) throws DaoException {
-		try (Connection connection = ConnectorDb.getConnection();
+	public void updateAuthorState(Author author, AuthorState authorState) throws DaoException {
+		/*try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("UPDATE author SET state = ? WHERE author = ?")) {
 			ps.setString(1, authorState.toString());
 			ps.setString(2, authorName);
@@ -82,11 +105,17 @@ public class AuthorDao implements IAuthorDao {
 		} catch (SQLException e) {
 			logger.info("SQL Exception");
 			e.printStackTrace();
-		}
-
+		}*/
+		author.setAuthorState(authorState);
+		EntityTransaction transcation = entityManager.getTransaction();
+		transcation.begin();
+		entityManager.merge(author);
+		transcation.commit();
+		
+		entityManager.close();
 	}
 
-	@Override
+	/*@Override
 	public void getAuthorIdByName(String authorName) throws DaoException {
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("SELECT id FROM author WHERE author = ?")){
@@ -96,8 +125,7 @@ public class AuthorDao implements IAuthorDao {
 			logger.info("SQL Exception");
 			e.printStackTrace();
 		}
-		
-	}
+	}*/
 
 	@Override
 	public Author getAuthorById(int authorId) throws DaoException {

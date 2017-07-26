@@ -13,9 +13,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.commons.io.IOUtils;
@@ -51,6 +53,7 @@ public class NewsDao implements INewsDao {
 	@Autowired
 	private EntityManager entityManager;
 
+	
 	public NewsDao() {
 	}
 
@@ -68,6 +71,23 @@ public class NewsDao implements INewsDao {
 
 	public void setAuthorDao(IAuthorDao authorDao) {
 		this.authorDao = authorDao;
+	}
+
+	public ICommentDao getCommentDao() {
+		return commentDao;
+	}
+
+	public void setCommentDao(ICommentDao commentDao) {
+		this.commentDao = commentDao;
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+	
+	@PersistenceContext
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 
 	public static void main(String[] args) {
@@ -281,7 +301,7 @@ public class NewsDao implements INewsDao {
 			throw new DaoException(e);
 		}*/
 		News oldNews = entityManager.find(News.class, newsId);
-		ArrayList<Tag> tagList = oldNews.getTagList();
+		List<Tag> tagList = oldNews.getTagList();
 		Iterator<Tag> iterator = tagList.iterator();
 		while(iterator.hasNext()){
 			Tag tagTemp = iterator.next();
@@ -389,8 +409,8 @@ public class NewsDao implements INewsDao {
 	}
 
 	@Override
-	public ArrayList<News> getTheMostPopularNews(int newsQuantity) throws DaoException { //TODO top
-		ResultSet rs = null;
+	public ArrayList<News> getTheMostPopularNews(int newsQuantity) throws DaoException {
+		/*ResultSet rs = null;
 		ArrayList<News> newsList = new ArrayList<News>();
 		try (Connection connection = ConnectorDb.getConnection();
 				PreparedStatement ps = connection.prepareStatement("select * from news" + "inner join ("
@@ -427,6 +447,11 @@ public class NewsDao implements INewsDao {
 			Logger.info("SQLException: while transforming CLOB to String");
 			throw new DaoException(e);
 		}
+		return newsList;*/
+		ArrayList<News> newsList = new ArrayList<News>();
+		Query query = entityManager.createNamedQuery("getAllNews");
+		query.setMaxResults(newsQuantity);
+		newsList = (ArrayList<News>) query.getResultList();
 		return newsList;
 	}
 

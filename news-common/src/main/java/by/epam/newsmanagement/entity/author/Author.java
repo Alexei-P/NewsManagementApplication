@@ -5,22 +5,31 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="Author")
+@NamedQueries({
+	@NamedQuery(name = "getAuthorIdByName", query = "SELECT author FROM Author author WHERE author.id = :id"),
+})
 public class Author implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@Column(name = "A_ID")
 	int id;
 	
 	@Column(name = "AUTHOR")
 	String name;
 	
 	@Column(name = "STATE")
+	@Enumerated(EnumType.STRING)
 	AuthorState authorState;
 	
 	public Author(String name, AuthorState authorState) {
