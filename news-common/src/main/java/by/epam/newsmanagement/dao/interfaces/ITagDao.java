@@ -6,13 +6,13 @@ import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.exception.dao.DaoException;
 
 public interface ITagDao {
-	public void createTag(String tag) throws DaoException;
+  public void createTag(String tag) throws DaoException;
 
-	public void changeTag(String oldTag, String newTag) throws DaoException;
+  public void changeTag(String oldTag, String newTag) throws DaoException;
 
-	public void deleteTag(String tag) throws DaoException;
+  public void deleteTag(String tag) throws DaoException;
 
-	public ArrayList<Tag> getAllTags() throws DaoException;
-	
-	public ArrayList<String> getTagsByNewsId(int newsId) throws DaoException;
+  public ArrayList<Tag> getAllTags() throws DaoException;
+
+  public ArrayList<String> getTagsByNewsId(int newsId) throws DaoException;
 }

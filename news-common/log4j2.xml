@@ -6,14 +6,11 @@
 		</Console>
 		<File name="logger" fileName="D:/main.log">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
-			<!-- <Policies>
-                <SizeBasedTriggeringPolicy size="512 kB"/>
-            </Policies> -->
+			<!-- <Policies> <SizeBasedTriggeringPolicy size="512 kB"/> </Policies> -->
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="logger" level="info"
-			additivity="false">
+		<Logger name="logger" level="info" additivity="false">
 			<AppenderRef ref="logger" />
 		</Logger>
 		<Root level="debug">

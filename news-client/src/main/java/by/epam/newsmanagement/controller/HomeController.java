@@ -22,68 +22,69 @@ import by.epam.newsmanagement.service.impl.NewsService;
 @RestController
 @RequestMapping("/")
 public class HomeController {
-	
-	@Autowired
-	NewsService newsService;
-	
-	@Autowired
-	AuthorService authorService;
 
-	public HomeController() {
-		System.out.println("HOME CONTROLLER");
-	}
+  @Autowired
+  NewsService newsService;
 
-	@RequestMapping(value = "/getNews", method = RequestMethod.GET)
-	public ResponseEntity<ArrayList<News>> getAllNews() {
-		ArrayList<News> newsList = null;
-		try {
-			newsList = newsService.getAllNews();
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (newsList.isEmpty()) {
-			return new ResponseEntity<ArrayList<News>>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<ArrayList<News>>(newsList, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/getNews/{id}", method = RequestMethod.GET)
-	public ResponseEntity<News> getNewsById(@PathVariable("id") int newsId){
-		News news = null;
-		try {
-			news = newsService.getNews(newsId);
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (news == null){
-			return new ResponseEntity<News>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<News>(news, HttpStatus.OK);
-	}
+  @Autowired
+  AuthorService authorService;
 
-	@RequestMapping(value = "/getAuthor/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Author> getAuthorById(@PathVariable("id") int authorId){
-		Author author = null;
-			try {
-				author = authorService.getAuthorById(authorId);
-			} catch (ServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (author == null) return new ResponseEntity<Author>(HttpStatus.NO_CONTENT);
-			
-			return new ResponseEntity<Author>(author, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/getTags", method = RequestMethod.GET)
-	public ResponseEntity<String> getTag() {
-		return new ResponseEntity<String>("TEST", HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/redir", method = RequestMethod.GET)
-	public String redirectExample(){
-		return "index_2";
-	}
+  public HomeController() {
+    System.out.println("HOME CONTROLLER");
+  }
+
+  @RequestMapping(value = "/getNews", method = RequestMethod.GET)
+  public ResponseEntity<ArrayList<News>> getAllNews() {
+    ArrayList<News> newsList = null;
+    try {
+      newsList = newsService.getAllNews();
+    } catch (ServiceException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (newsList.isEmpty()) {
+      return new ResponseEntity<ArrayList<News>>(HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity<ArrayList<News>>(newsList, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/getNews/{id}", method = RequestMethod.GET)
+  public ResponseEntity<News> getNewsById(@PathVariable("id") int newsId) {
+    News news = null;
+    try {
+      news = newsService.getNews(newsId);
+    } catch (ServiceException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (news == null) {
+      return new ResponseEntity<News>(HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity<News>(news, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/getAuthor/{id}", method = RequestMethod.GET)
+  public ResponseEntity<Author> getAuthorById(@PathVariable("id") int authorId) {
+    Author author = null;
+    try {
+      author = authorService.getAuthorById(authorId);
+    } catch (ServiceException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    if (author == null)
+      return new ResponseEntity<Author>(HttpStatus.NO_CONTENT);
+
+    return new ResponseEntity<Author>(author, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/getTags", method = RequestMethod.GET)
+  public ResponseEntity<String> getTag() {
+    return new ResponseEntity<String>("TEST", HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/redir", method = RequestMethod.GET)
+  public String redirectExample() {
+    return "index_2";
+  }
 }

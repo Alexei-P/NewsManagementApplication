@@ -13,9 +13,9 @@
 
 	<bean id="newsDao" class="by.epam.newsmanagement.dao.impl.NewsDao">
 		<property name="tagDao" ref="tagDao" />
-		<property name="authorDao" ref="authorDao"/>
+		<property name="authorDao" ref="authorDao" />
 	</bean>
-	
+
 	<bean id="tagDao" class="by.epam.newsmanagement.dao.impl.TagDao" />
 	<bean id="userDao" class="by.epam.newsmanagement.dao.impl.UserDao" />
 
@@ -26,7 +26,8 @@
 	<bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="jdbcUrl" value="jdbc:oracle:thin://localhost:1521/newsmnt_copy.minsk.epam.com" />
+		<property name="jdbcUrl"
+			value="jdbc:oracle:thin://localhost:1521/newsmnt_copy.minsk.epam.com" />
 		<property name="username" value="unit_test2" />
 		<property name="password" value="Oracle_1" />
 	</bean>
