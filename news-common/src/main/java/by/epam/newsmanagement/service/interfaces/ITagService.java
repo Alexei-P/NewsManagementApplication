@@ -11,7 +11,7 @@ public interface ITagService {
 
   public ArrayList<News> searchNewsByTags(ArrayList<Tag> tagList) throws ServiceException;
 
-  public void createTag(String tag) throws ServiceException;
+  public void createTag(Tag tag) throws ServiceException;
 
   public void changeTag(String oldTag, String newTag) throws ServiceException;
 

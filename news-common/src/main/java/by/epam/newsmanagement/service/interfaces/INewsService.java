@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.entity.News;
+import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.exception.service.ServiceException;
 
 public interface INewsService {
@@ -22,6 +23,8 @@ public interface INewsService {
   public void addComment(int newsId, Comment comment) throws ServiceException;
 
   public void deleteComment(int commentId) throws ServiceException;
+  
+  public void addTagToNews(int newsId, String tag) throws ServiceException;
 
-
+  public void deleteTagFromNews(int newsId, String tag) throws ServiceException;
 }

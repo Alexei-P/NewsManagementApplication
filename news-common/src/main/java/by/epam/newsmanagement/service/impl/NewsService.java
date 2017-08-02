@@ -15,6 +15,7 @@ import by.epam.newsmanagement.dao.interfaces.ICommentDao;
 import by.epam.newsmanagement.dao.interfaces.INewsDao;
 import by.epam.newsmanagement.entity.Comment;
 import by.epam.newsmanagement.entity.News;
+import by.epam.newsmanagement.entity.Tag;
 import by.epam.newsmanagement.exception.dao.DaoException;
 import by.epam.newsmanagement.exception.service.ServiceException;
 import by.epam.newsmanagement.service.interfaces.INewsService;
@@ -48,20 +49,6 @@ public class NewsService implements INewsService {
 
   public void setCommentDao(CommentDao commentDao) {
     this.commentDao = commentDao;
-  }
-
-  // TODO delete main for test
-  public static void main(String[] args) {
-    ApplicationContext ac = new ClassPathXmlApplicationContext("Beans.xml");
-    NewsService newsService = (NewsService) ac.getBean("newsService");
-    ArrayList<News> newsList = null;
-    try {
-      newsList = newsService.getAllNews();
-    } catch (ServiceException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    System.out.println(newsList);
   }
 
   @Override
@@ -150,4 +137,28 @@ public class NewsService implements INewsService {
       throw new ServiceException(e);
     }
   }
+
+  @Override
+  public void addTagToNews(int newsId, String tag) throws ServiceException {
+    try {
+      newsDao.deleteTagFromNews(newsId, tag);
+    } catch (DaoException e) {
+      Logger.info("SQLException during tag adding");
+      e.printStackTrace();
+    }
+    
+  }
+
+  @Override
+  public void deleteTagFromNews(int newsId, String tag) throws ServiceException {
+    try {
+      newsDao.deleteTagFromNews(newsId, tag);
+    } catch (DaoException e) {
+      Logger.info("SQLException during tag deletion");
+      e.printStackTrace();
+    }
+    
+  }
+  
+  
 }

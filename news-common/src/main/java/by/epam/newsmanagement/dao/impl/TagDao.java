@@ -38,8 +38,8 @@ public class TagDao implements ITagDao {
 
   public static Logger logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 
-  public void createTag(String tag) throws DaoException {
-    Connection connection = null;
+  public void createTag(Tag tag) throws DaoException {
+/*    Connection connection = null;
     PreparedStatement ps = null;
     try {
       connection = ConnectorDb.getConnection();
@@ -67,7 +67,12 @@ public class TagDao implements ITagDao {
       } else {
         logger.info("Prepared Statement was not created");
       }
-    }
+    }*/
+    
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.persist(tag);
+    transaction.commit();
 
   }
 
@@ -144,7 +149,7 @@ public class TagDao implements ITagDao {
 
   }
 
-  @Override
+/*  @Override
   public ArrayList<String> getTagsByNewsId(int newsId) throws DaoException {
     ResultSet rs = null;
     ArrayList<String> tagList = new ArrayList<String>();
@@ -164,6 +169,6 @@ public class TagDao implements ITagDao {
     }
     return tagList;
 
-  }
+  }*/
 
 }

@@ -57,13 +57,14 @@ public class AuthorDao implements IAuthorDao {
   }
 
   @Override
-  public void deleteAuthorLogically(Author author) throws DaoException {
+  public void deleteAuthorLogically(int authorId) throws DaoException {
     /*
      * try (Connection connection = ConnectorDb.getConnection(); PreparedStatement ps =
      * connection.prepareStatement("UPDATE author SET state = D WHERE author = ?")) {
      * ps.setString(1, authorName); ps.executeUpdate(); } catch (SQLException e) {
      * logger.info("SQL Exception"); e.printStackTrace(); }
      */
+    Author author = entityManager.find(Author.class, authorId);
     author.setAuthorState(AuthorState.DELETED);
     EntityTransaction transcation = entityManager.getTransaction();
     transcation.begin();
@@ -74,13 +75,14 @@ public class AuthorDao implements IAuthorDao {
   }
 
   @Override
-  public void deleteAuthorPhisically(Author author) throws DaoException {
+  public void deleteAuthorPhisically(int authorId) throws DaoException {
     /*
      * try (Connection connection = ConnectorDb.getConnection(); PreparedStatement ps =
      * connection.prepareStatement("DELETE FROM author WHERE author = ?")) { ps.setString(1,
      * authorName); ps.executeUpdate(); } catch (SQLException e) { logger.info("SQL Exception");
      * e.printStackTrace(); }
      */
+    Author author = entityManager.find(Author.class, authorId);
     EntityTransaction transcation = entityManager.getTransaction();
     transcation.begin();
     entityManager.remove(author);

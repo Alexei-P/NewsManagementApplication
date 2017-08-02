@@ -7,9 +7,9 @@ import by.epam.newsmanagement.exception.service.ServiceException;
 public interface IAuthorService {
   public void addAuthor(String authorName, AuthorState authorState) throws ServiceException;
 
-  public void deleteAuthorLogically(Author author) throws ServiceException;
+  public void deleteAuthorLogically(int authorId) throws ServiceException;
 
-  public void deleteAuthorPhisically(Author author) throws ServiceException;
+  public void deleteAuthorPhisically(int authorId) throws ServiceException;
 
   public void updateAuthorState(Author author, AuthorState authorState) throws ServiceException;
 

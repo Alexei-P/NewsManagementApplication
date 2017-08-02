@@ -70,7 +70,7 @@ $(document).ready(function() {
 						var i = 0;
 						var templateCommentHtml = $(templateComment).html();
 						var templateCompiled = Handlebars.compile(templateCommentHtml);
-						var placeHolder = $(".blog-post");
+						var placeHolder = $(".comment-list");
 						while (i<commentsList.length){
 							var html = templateCompiled(commentsList[i]);
 							placeHolder.append(html);

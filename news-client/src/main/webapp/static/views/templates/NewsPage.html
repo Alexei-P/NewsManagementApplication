@@ -17,6 +17,10 @@
 			</div>
 			<!--/.nav-collapse -->
 		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li>USER NAME</li>
+			<li><a href="RentalShopController?action=SignOut">SIGN OUT</a></li>
+		</ul>
 		<!--/.container-fluid -->
 	</nav>
 
@@ -58,12 +62,24 @@
 		<!-- /.row -->
 
 	</div>
-	
-	
-      <h2 class="page-header">Comments</h2>
-        <section class="comment-list">
-          
-        </section>
-    
+
+
+	<h2 class="page-header">Comments</h2>
+	<section class="comment-list"></section>
+
+	<div class="widget-area no-padding blank">
+		<div class="status-upload">
+			<form>
+				<textarea placeholder="Leave a comment"></textarea>
+				<button type="submit" class="btn btn-success green" id="addComment">
+					<i class="fa fa-share"></i> Add Comment
+				</button>
+			</form>
+		</div>
+		<!-- Status Upload  -->
+	</div>
+	<!-- Widget Area -->
+
+
 </body>
 </html>
