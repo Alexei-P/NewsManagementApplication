@@ -18,4 +18,8 @@ public interface ITagService {
   public void deleteTag(String tag) throws ServiceException;
 
   public ArrayList<Tag> getAllTags() throws ServiceException;
+  
+  public void deleteTagById(int tagId) throws ServiceException;
+  
+  public Tag getTagById(int tagId) throws ServiceException;
 }

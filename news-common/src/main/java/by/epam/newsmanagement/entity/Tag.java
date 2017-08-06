@@ -17,7 +17,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "TAG")
 @NamedQueries({@NamedQuery(name = "deleteTag", query = "DELETE FROM Tag tag where tag.tag = :tag"),
-    @NamedQuery(name = "getAllTags", query = "SELECT tag FROM Tag tag")})
+    @NamedQuery(name = "getAllTags", query = "SELECT tag FROM Tag tag"),
+    @NamedQuery(name = "updateTag", query = "UPDATE Tag tag SET tag.tag = :newTag WHERE tag = :oldTag")})
 public class Tag implements Serializable {
 
   /**

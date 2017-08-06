@@ -26,16 +26,6 @@ public class TagDao implements ITagDao {
   @PersistenceContext
   EntityManager entityManager;
 
-  public static void main(String[] args) { // TEST
-    ITagDao tagDao = new TagDao();
-    try {
-      tagDao.changeTag("economics_2", "economics_3");
-    } catch (DaoException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-
   public static Logger logger = org.apache.logging.log4j.LogManager.getLogger("logger");
 
   public void createTag(Tag tag) throws DaoException {
@@ -77,7 +67,7 @@ public class TagDao implements ITagDao {
   }
 
   public void changeTag(String oldTag, String newTag) throws DaoException {
-    Connection connection = null;
+    /*Connection connection = null;
     PreparedStatement ps = null;
     try {
       connection = ConnectorDb.getConnection();
@@ -105,8 +95,14 @@ public class TagDao implements ITagDao {
           throw new DaoException(e);
         }
       }
-    }
-
+    }*/
+    EntityTransaction transaction = entityManager.getTransaction();
+    Query query = entityManager.createNamedQuery("udpateTag");
+    query.setParameter("oldTag", oldTag);
+    query.setParameter("newTag", newTag);
+    transaction.begin();
+    query.executeUpdate();
+    transaction.commit();
   }
 
   public void deleteTag(String tag) throws DaoException {
@@ -147,6 +143,21 @@ public class TagDao implements ITagDao {
 
     return tagList;
 
+  }
+  
+  public void deleteTagById(int tagId){
+    Tag tag = entityManager.find(Tag.class, tagId);
+    EntityTransaction transaction = entityManager.getTransaction();
+    transaction.begin();
+    entityManager.remove(tag);
+    transaction.commit();
+  }
+
+  @Override
+  public Tag getTagById(int tagId) throws DaoException {
+    Tag tag = null;
+    tag = entityManager.find(Tag.class, tagId);
+    return tag;
   }
 
 /*  @Override

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<table name="UNIT_TEST2.TAG">
+		<column>TAG_ID</column>
+		<column>TAG</column>
+		<row>
+            <value>21</value>
+            <value>test</value>
+        </row>
+	</table>
+</dataset>

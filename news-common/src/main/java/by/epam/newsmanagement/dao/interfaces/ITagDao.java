@@ -13,6 +13,10 @@ public interface ITagDao {
   public void deleteTag(String tag) throws DaoException;
 
   public ArrayList<Tag> getAllTags() throws DaoException;
+  
+  public void deleteTagById(int tagId) throws DaoException;
+  
+  public Tag getTagById(int tagId) throws DaoException;
 
   /*public ArrayList<String> getTagsByNewsId(int newsId) throws DaoException;*/
 }

@@ -73,4 +73,24 @@ public class TagService implements ITagService {
     return tagList;
   }
 
+  @Override
+  public void deleteTagById(int tagId) throws ServiceException {
+    try {
+      tagDao.deleteTagById(tagId);
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }    
+  }
+
+  @Override
+  public Tag getTagById(int tagId) throws ServiceException {
+    Tag tag = null;
+    try {
+      tag = tagDao.getTagById(tagId);
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
+    return tag;
+  }
+
 }
